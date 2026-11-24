@@ -1,19 +1,22 @@
+
 name: Katabump Auto Renew
 
 on:
   schedule:
-  - cron: '0 2 */3 * *'  # 每天 UTC 0点 (北京时间 8点) 运行,根据服务到期时间自行修改
-  workflow_dispatch: # 允许手动触发
+    # 每天北京时间上午 10:00 运行
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 
 jobs:
   Renew-Katabump:
     runs-on: ubuntu-latest
     permissions:
-      actions: write  
+      actions: write
       contents: read
-    
+
     steps:
     - uses: actions/checkout@v6
+
     - name: ⚙ 设置 Python
       uses: actions/setup-python@v6
       with:
@@ -42,7 +45,7 @@ jobs:
       run: |
         xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
           python3 app.py
-        
+
     - name: 🧹 清理旧的工作流运行记录
       if: always()
       env:
